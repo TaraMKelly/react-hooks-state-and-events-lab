@@ -3,30 +3,24 @@ import Item from "./Item";
 
 function ShoppingList({ items }) {
 
-  const [filter, setFilter] = useState('')
-  const clickSelect = e => setFilter(e.target.value)
-  const cartFilter = () => {
-    const filterMethod = (item) => item.category === filter
- 
-    switch (filter) {
-      case "Produce":
-        return items.filter(filterMethod)
-        break;
-      case "Dairy":
-        return items.filter(filterMethod)
-        break;
-      case "Dessert":
-        return items.filter(filterMethod)
-        break;
-      default:
-        return items;
+  const [selectedCategory, setCategory] = useState("All")
+
+  function handleSelect(event) {
+    setCategory(event.target.value)
+  }
+
+  const filteredItems = items.filter(item => {
+    if (selectedCategory === "All") return true
+    else {
+      return item.category === selectedCategory
     }
-  };
+  })
+
 
   return (
     <div className="ShoppingList">
       <div className="Filter">
-        <select onChange={clickSelect} name="filter">
+        <select onChange={handleSelect} name="filter">
           <option value="All">Filter by category</option>
           <option value="Produce">Produce</option>
           <option value="Dairy">Dairy</option>
@@ -34,7 +28,7 @@ function ShoppingList({ items }) {
         </select>
       </div>
       <ul className="Items">
-        {cartFilter().map((item) => (
+        {filteredItems.map((item) => (
           <Item key={item.id} name={item.name} category={item.category} />
         ))}
       </ul>
@@ -42,7 +36,7 @@ function ShoppingList({ items }) {
   );
 }
 
-  
+
 //   const [ selectedCategory, setCategory ] = useState("All")
 
 //   function handleSelect(event) {
@@ -55,7 +49,7 @@ function ShoppingList({ items }) {
 //       }
 //     })
 //   }
-  
+
 //   return (
 //     <div className="ShoppingList">
 //       <div className="Filter">
